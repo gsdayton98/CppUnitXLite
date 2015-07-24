@@ -3,10 +3,33 @@ Welcome to the C++ Extra Light Unit Testing Framework
 To use, include the header file CppUnitXLite.hpp in your own unit test.  Read
 the header file for its documentation on how to use it.
 
+Also include CppUnitXLite.cpp for definitions that the linker insists should
+happen only once, or compile it separately and include it on the link command
+line.
+
 CppUnitXLiteTests contain unit tests for the framework itself and may be used
-as an example of using CppUnitXLiteTest.
+as an example of using CppUnitXLiteTest.  The framework compiles the definition
+file, CppUnitXLite.cpp, separately and links it.  Three files implement the
+CPPUnitXLite tests just to prove that multi-source files tests can be created.
 
 To make the tests, change the working directory to CppUnitXLiteTests and perform
 
     make -f CppUnitXLite.mak
+
+
+WHY?
+
+Most unit testing frameworks take their inspiration from frameworks for other
+languages, missing the power and elegance of C++.  They implement features not
+needed in a compiled and linked language like C++.  For example, in C++, if
+you need a global test framework, just define one.  You don't need to
+co-ordinate it with unit testing.
+
+As you work and modify this framework, please keep it simple as possible and
+no simpler.  If you want GoogleTest style ASSERT and CHECK -- please don't. If
+you want to abort the test program, do it yourself in the program, and don't
+expect the framework to do it for you.
+
+As for mock objects, you can replace system functions by just defining them
+before the system libraries load.
 

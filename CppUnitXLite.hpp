@@ -61,12 +61,6 @@ class TestRegistry;
 class TestResult;
 
 
-/**
- * Convenience macro for creating the test driver.
- */
-#define TESTMAIN \
-int main(int, char **) { TestResult tr; TestRegistry::run(tr); return 0; }
-
 #define TEST(testGroup, testName)\
 class testGroup##testName##Test : public Test \
 { public: testGroup##testName##Test () : Test (#testName "Test") {} \
@@ -81,6 +75,32 @@ void testGroup##testName##Test::run (TestResult& theResult)
 #define CHECK_APPROX_EQUAL(expected,actual,threshold) checkApproxEqual((expected), (actual), (threshold), theResult, __FILE__, __LINE__)
 
 #define FAIL(text) fail(theResult, (text), __FILE__, __LINE__)
+
+
+/**
+ * Constructor of Test registers the test instance with the
+ * TestRegistry during the static initialization phase.
+ */
+class TestRegistry
+{
+public:
+  static void addTest(Test *test) { instance().add(test); }
+
+  static void runAll(TestResult &result) { instance().run(result); }
+
+private:
+  static TestRegistry& instance()
+  {
+    static TestRegistry registry;
+    return registry;
+  }
+
+  void add(Test *test);
+
+  void run(TestResult &result);
+
+  Test *tests;
+};
 
 
 /**
@@ -107,7 +127,12 @@ protected:
              bool condition,
              const char *conditionString,
              const char *fileName = __FILE__,
-             unsigned int lineNumber = __LINE__);
+             unsigned int lineNumber = __LINE__)
+  {
+    if (!condition) fail(result, conditionString, fileName, lineNumber);
+    return condition;
+  }
+
 
   bool fail(TestResult &result,
             const char *conditionString,
@@ -119,7 +144,18 @@ protected:
                   SubjectType actual,
                   TestResult &result,
                   const char *fileName = __FILE__,
-                  unsigned int lineNumber = __LINE__);
+                  unsigned int lineNumber = __LINE__)
+  {
+    bool successful = expected == actual;
+    if (!successful)
+    {
+      std::ostringstream message;
+      message << "expected: " << expected << " but received: " << actual;
+      fail(result, message.str().c_str(), fileName, lineNumber);
+    }
+    return successful;
+  }
+
 
   template<typename SubjectType>
   bool checkApproxEqual(SubjectType expected,
@@ -192,61 +228,6 @@ private:
 };
 
 
-/**
- * Constructor of Test registers the test instance with the
- * TestRegistry during the static initialization phase.
- */
-class TestRegistry
-{
-public:
-  static void addTest(Test *test) { instance().add(test); }
-
-  static void runAll(TestResult &result) { instance().run(result); }
-
-private:
-  static TestRegistry& instance()
-  {
-    static TestRegistry registry;
-    return registry;
-  }
-
-  void add(Test *test)
-  {
-    if (tests != NULL) test->next(tests);
-    tests = test;
-  }
-
-  void run(TestResult &result)
-  {
-    for (Test *test = tests; test != NULL; test = test->next()) test->run(result);
-    result.testsEnded();
-  }
-
-  Test *tests;
-};
-
-
-Test::Test(const char *theTestName)
-: testName(theTestName),
-  nextTest(NULL)
-{
-  TestRegistry::addTest(this);
-}
-
-
-inline
-bool
-Test::check(TestResult &result,
-            bool condition,
-            const char *conditionString,
-            const char *fileName,
-            unsigned int lineNumber)
-{
-  if (!condition) fail(result, conditionString, fileName, lineNumber);
-  return condition;
-}
-
-
 inline
 bool
 Test::fail(TestResult &result,
@@ -256,46 +237,6 @@ Test::fail(TestResult &result,
 {
   result.addFailure(Failure(testName.c_str(), fileName, lineNumber, conditionString));
   return false;
-}
-
-
-template<typename SubjectType>
-bool
-Test::checkEqual(SubjectType expected,
-                 SubjectType actual,
-                 TestResult &result,
-                 const char *fileName,
-                 unsigned lineNumber)
-{
-  bool successful = expected == actual;
-  if (!successful)
-  {
-    std::ostringstream message;
-    message << "expected: " << expected << " but received: " << actual;
-    fail(result, message.str().c_str(), fileName, lineNumber);
-  }
-  return successful;
-}
-
-
-template<>
-bool
-Test::checkEqual<const char *>(const char *expected,
-                 const char * actual,
-                 TestResult &result,
-                 const char *fileName,
-                 unsigned lineNumber)
-{
-  expected = expected != NULL ? expected : "<null>";
-  actual = actual != NULL ? actual : "<null>";
-  bool successful = std::string(expected) == std::string(actual);
-  if (!successful)
-  {
-    std::ostringstream message;
-    message << "expected: " << expected << " but received: " << actual;
-    fail(result, message.str().c_str(), fileName, lineNumber);
-  }
-  return successful;
 }
 
 

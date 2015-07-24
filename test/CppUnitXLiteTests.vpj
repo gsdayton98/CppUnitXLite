@@ -245,10 +245,13 @@
     <Files AutoFolders="DirectoryView">
         <Folder Name="../">
             <F N="../CppUnitXLite.hpp"/>
+            <F N="../README"/>
         </Folder>
         <F N="CppUnitXLiteTests.cpp"/>
+        <F N="CppUnitXLiteTests.hpp"/>
         <F
             N="CppUnitXLiteTests.mak"
             Type="Makefile"/>
+        <F N="NoMacroTests.cpp"/>
     </Files>
 </Project>

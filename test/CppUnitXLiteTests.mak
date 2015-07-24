@@ -20,12 +20,12 @@ endif
 ifeq "$(CFG)" "Debug"
 OUTDIR=Debug
 OUTFILE=$(OUTDIR)/CppUnitXLiteTests
-CFG_INC=-I../..
+CFG_INC=-I../.. 
 CFG_LIB=
 CFG_OBJ=
-COMMON_OBJ=$(OUTDIR)/CppUnitXLiteTests.o
+COMMON_OBJ=$(OUTDIR)/CppUnitXLiteTests.o $(OUTDIR)/NoMacroTests.o 
 OBJ=$(COMMON_OBJ) $(CFG_OBJ)
-ALL_OBJ=$(OUTDIR)/CppUnitXLiteTests.o
+ALL_OBJ=$(OUTDIR)/CppUnitXLiteTests.o $(OUTDIR)/NoMacroTests.o 
 
 COMPILE=clang++ -c   -g -std=c++11 -o "$(OUTDIR)/$(*F).o" $(CFG_INC) $<
 LINK=clang++  -g -o "$(OUTFILE)" $(ALL_OBJ)
@@ -61,12 +61,12 @@ endif
 ifeq "$(CFG)" "Release"
 OUTDIR=Release
 OUTFILE=$(OUTDIR)/CppUnitXLiteTests
-CFG_INC=-I../..
+CFG_INC=-I../.. 
 CFG_LIB=
 CFG_OBJ=
-COMMON_OBJ=$(OUTDIR)/CppUnitXLiteTests.o
+COMMON_OBJ=$(OUTDIR)/CppUnitXLiteTests.o $(OUTDIR)/NoMacroTests.o 
 OBJ=$(COMMON_OBJ) $(CFG_OBJ)
-ALL_OBJ=$(OUTDIR)/CppUnitXLiteTests.o
+ALL_OBJ=$(OUTDIR)/CppUnitXLiteTests.o $(OUTDIR)/NoMacroTests.o 
 
 COMPILE=clang++ -c   -std=c++11 -o "$(OUTDIR)/$(*F).o" $(CFG_INC) $<
 LINK=clang++  -o "$(OUTFILE)" $(ALL_OBJ)
