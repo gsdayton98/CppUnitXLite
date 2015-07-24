@@ -1,0 +1,12 @@
+Welcome to the C++ Extra Light Unit Testing Framework
+
+To use, include the header file CppUnitXLite.hpp in your own unit test.  Read
+the header file for its documentation on how to use it.
+
+CppUnitXLiteTests contain unit tests for the framework itself and may be used
+as an example of using it.
+
+To make the tests, change the working directory to CppUnitXLiteTests and perform
+
+    make -f CppUnitXLite.mak
+
