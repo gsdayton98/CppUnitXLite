@@ -1,4 +1,25 @@
 // -*- mode:C++; c-basic-offset:2; indent-tabs-mode:nil -*-
+/* 
+Copyright (c) 2015 Glen S. Dayton
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE. 
+*/
 /**
   *  Extra light framework for unit testing in C++.
   *
@@ -68,10 +89,7 @@ void testGroup##testName##Test::run (TestResult& theResult)
 class Test
 {
 public:
-  Test(const char *theTestName)
-  : testName(theTestName),
-    nextTest(NULL)
-  { TestRegistry::addTest(this); }
+  Test(const char *theTestName);
 
   /**
    * Override the run() method to execute your own tests.
@@ -174,7 +192,6 @@ private:
 };
 
 
-
 /**
  * Constructor of Test registers the test instance with the
  * TestRegistry during the static initialization phase.
@@ -184,7 +201,7 @@ class TestRegistry
 public:
   static void addTest(Test *test) { instance().add(test); }
 
-  static void run(TestResult &result) { instance().run(result); }
+  static void runAll(TestResult &result) { instance().run(result); }
 
 private:
   static TestRegistry& instance()
@@ -208,6 +225,13 @@ private:
   Test *tests;
 };
 
+
+Test::Test(const char *theTestName)
+: testName(theTestName),
+  nextTest(NULL)
+{
+  TestRegistry::addTest(this);
+}
 
 
 inline
@@ -235,7 +259,6 @@ Test::fail(TestResult &result,
 }
 
 
-
 template<typename SubjectType>
 bool
 Test::checkEqual(SubjectType expected,
@@ -254,7 +277,7 @@ Test::checkEqual(SubjectType expected,
   return successful;
 }
 
-inline
+
 template<>
 bool
 Test::checkEqual<const char *>(const char *expected,
@@ -294,6 +317,5 @@ Test::checkApproxEqual(SubjectType expected,
   }
   return successful;
 }
-
 #endif // CPPUNITXLITE_H_
 
