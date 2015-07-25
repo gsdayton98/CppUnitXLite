@@ -26,9 +26,7 @@
                 SaveOption="SaveCurrent"
                 RunFromDir="%rw"
                 ClearProcessBuffer="1">
-                <Exec
-                    CmdLine='clang++ -c %xup %defd -g %~other -o "%bd%n%oe" %i %f'
-                    OtherOptions="-std=c++11"/>
+                <Exec CmdLine='clang++ -c %xup %defd -g -o "%bd%n%oe" %i %f'/>
             </Target>
             <Target
                 Name="Link"
@@ -135,9 +133,7 @@
                 SaveOption="SaveCurrent"
                 RunFromDir="%rw"
                 ClearProcessBuffer="1">
-                <Exec
-                    CmdLine='clang++ -c %xup %defd %~other -o "%bd%n%oe" %i %f'
-                    OtherOptions="-std=c++11"/>
+                <Exec CmdLine='clang++ -c %xup %defd -o "%bd%n%oe" %i %f'/>
             </Target>
             <Target
                 Name="Link"

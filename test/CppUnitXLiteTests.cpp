@@ -123,10 +123,17 @@ main(int, char **)
     {
       std::cerr << "Did not get expected failures" << std::endl;
 
+      #if __cplusplus >= 201103L
       for (const auto &f : tr)
       {
         std::cout << f.testName << ": " << f.message << ": " << f.fileName << "@" << f.lineNumber << std::endl;
       }
+      #else
+      for (std::vector<Failure>::const_iterator f=tr.begin(); f != tr.end(); ++f)
+      {
+        std::cout << f->testName << ": " << f->message << ": " << f->fileName << "@" << f->lineNumber << std::endl;
+      }
+      #endif
     }
 
     exitStatus = EXIT_SUCCESS;
