@@ -1,58 +1,61 @@
+# -*- mode:C++; c-basic-offset:2; indent-tabs-mode:nil -*-
+#
+# Copyright (c) 2015 Glen S. Dayton
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
 
 MAKE=/usr/bin/make
 RM=/bin/rm
 MKDIR=/bin/mkdir
 
 .SUFFIXES:
-.SUFFICES: .cpp .hpp ..h .o
+.SUFFICES: .cpp .hpp .h .o
 
-BUILDDIR=./
-SRCDIR=
-TESTS=$(BUILDDIR)CppUnitXLiteTests
+SRCDIR=./
+TESTS=CppUnitXLiteTests
 
 VPATH=$(SRCDIR)
 
-INCLUDEDIR=$(SRCDIR)/../..
+INCLUDEDIR=$(SRCDIR)../..
 CPPFLAGS=-I$(INCLUDEDIR)
 
-MAKEDEPEND=$(CXX)  -MDD -MP $(CPPFLAGS) -o $*.d $<
-
-SRCS:= CppUnitXLiteTests.cpp NoMacroTests.cpp
+SRCS:=CppUnitXLiteTests.cpp NoMacroTests.cpp
 OBJS:=$(SRCS:%.cpp=%.o)
 
-
 SRCS:=$(addprefix $(SRCDIR),$(SRCS))
-OBJS:=$(addprefix $(BUILDDIR),$(OBJS))
 DEPS:=$(OBJS:%.o=%.d)
 
-
 %.o : %.cpp
-	$(COMPILE.cc) -o $(BUILDDIR)/$@ $<
+	$(COMPILE.cc) -o $@ $<
 
-#  Automatic dependency generation
-#  Has disadvantage of processing twice but is widely applicable
-%.d : %.cpp
-	@set -e; rm -f $@; \
-	$(CXX) -MMD -MP $(CPPFLAGS) $< > $@.$$$$; \
-	sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
-	rm -f $@.$$$$
+all: test
 
--include $(DEPS)
-
-all: $(TESTS)
-
-$(BUILDDIR)CppUnitXLiteTests: $(BUILDDIR) $(OBJS)
+CppUnitXLiteTests: $(OBJS)
 	$(LINK.cc) -o $@ $(OBJS)
 
-$(BUILDDIR):
-	$(MKDIR) -p "$(BUILDDIR)"
 
-$(BUILDDIR)/CppUnitXLiteTests.o : $(SRCDIR)/CppUnitXLiteTests.cpp
+CppUnitXLiteTests.o : $(SRCDIR)CppUnitXLiteTests.cpp
 
-$(BUILDDIR)/NoMacroTests.o : $(SRCDIR)/NoMacroTests.cpp
+NoMacroTests.o : $(SRCDIR)NoMacroTests.cpp
 
 test: $(TESTS)
-	$(BUILDDIR)CppUnitXLiteTests
+	./CppUnitXLiteTests
 
 
 # Rebuild this project
