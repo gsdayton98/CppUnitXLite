@@ -36,13 +36,6 @@ THE SOFTWARE.
 #include <string>
 #include <CppUnitXLite/CppUnitXLite.hpp>
 
-/**
- * Convenience macro for creating the test driver.
- */
-#define TESTMAIN \
-int main(int, char **) { TestResult tr; TestRegistry::run(tr); return 0; }
-
-
 Test::Test(const char *theTestName)
 : testName(theTestName),
   nextTest(NULL)
