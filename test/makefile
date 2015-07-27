@@ -27,7 +27,7 @@ MKDIR=/bin/mkdir
 .SUFFIXES:
 .SUFFICES: .cpp .hpp .h .o
 
-SRCDIR=
+SRCDIR=./
 TESTS=CppUnitXLiteTests
 
 VPATH=$(SRCDIR)
