@@ -71,6 +71,10 @@ void testGroup##testName##Test::run (TestResult& theResult)
 #define CHECK(condition) check(theResult, (condition), #condition, __FILE__, __LINE__)
 
 #define CHECK_EQUAL(expected,actual) checkEqual((expected), (actual), theResult, __FILE__, __LINE__)
+#define CHECK_LE(expected,actual) checkLE((expected), (actual), theResult, __FILE__, __LINE__)
+#define CHECK_LT(expected,actual) checkLT((expected), (actual), theResult, __FILE__, __LINE__)
+#define CHECK_GT(expected,actual) checkGT((expected), (actual), theResult, __FILE__, __LINE__)
+#define CHECK_GE(expected,actual) checkGE((expected), (actual), theResult, __FILE__, __LINE__)
 
 #define CHECK_APPROX_EQUAL(expected,actual,threshold) checkApproxEqual((expected), (actual), (threshold), theResult, __FILE__, __LINE__)
 
@@ -158,6 +162,73 @@ protected:
     return successful;
   }
 
+  template<typename SubjectType>
+  bool checkLE(SubjectType expected,
+               SubjectType actual,
+               TestResult &result,
+               const char *fileName = __FILE__,
+               unsigned int lineNumber = __LINE__)
+  {
+    bool successful = expected <=  actual;
+    if (!successful)
+    {
+      std::ostringstream message;
+      message << "expected " << expected << " not <= actual " << actual;
+      fail(result, message.str().c_str(), fileName, lineNumber);
+    }
+    return successful;
+  }
+
+  template<typename SubjectType>
+  bool checkLT(SubjectType expected,
+               SubjectType actual,
+               TestResult &result,
+               const char *fileName = __FILE__,
+               unsigned int lineNumber = __LINE__)
+  {
+    bool successful = expected <  actual;
+    if (!successful)
+    {
+      std::ostringstream message;
+      message << "expected " << expected << " not < actual " << actual;
+      fail(result, message.str().c_str(), fileName, lineNumber);
+    }
+    return successful;
+  }
+
+  template<typename SubjectType>
+  bool checkGT(SubjectType expected,
+               SubjectType actual,
+               TestResult &result,
+               const char *fileName = __FILE__,
+               unsigned int lineNumber = __LINE__)
+  {
+    bool successful = expected >  actual;
+    if (!successful)
+    {
+      std::ostringstream message;
+      message << "expected " << expected << " not > actual " << actual;
+      fail(result, message.str().c_str(), fileName, lineNumber);
+    }
+    return successful;
+  }
+
+  template<typename SubjectType>
+  bool checkGE(SubjectType expected,
+               SubjectType actual,
+               TestResult &result,
+               const char *fileName = __FILE__,
+               unsigned int lineNumber = __LINE__)
+  {
+    bool successful = expected >=  actual;
+    if (!successful)
+    {
+      std::ostringstream message;
+      message << "expected " << expected << " not >= actual " << actual;
+      fail(result, message.str().c_str(), fileName, lineNumber);
+    }
+    return successful;
+  }
 
   template<typename SubjectType>
   bool checkApproxEqual(SubjectType expected,

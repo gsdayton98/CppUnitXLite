@@ -104,6 +104,16 @@ TEST(CppUnitXLiteTest, CheckConstCharStar)
   CHECK_EQUAL("giraffe", actual);  ++expectedFailures;
 }
 
+TEST(CppUnitXLiteTest, CheckRelationalOperators)
+{
+  CHECK_LE(4, 5);
+  CHECK_LE(4, 4);
+  CHECK_LT(4, 5);
+  CHECK_GE(5, 4);
+  CHECK_GE(5, 5);
+  CHECK_GT(5, 4);
+}
+
 // Custom main() to drive tests of the test framework.
 //  In normal circumstances just use the
 //  TESTMAIN
