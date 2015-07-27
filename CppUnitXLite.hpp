@@ -76,6 +76,8 @@ void testGroup##testName##Test::run (TestResult& theResult)
 
 #define FAIL(text) fail(theResult, (text), __FILE__, __LINE__)
 
+#define TESTMAIN int main(int, char **) { TestResult tr; TestRegistry::run(tr); return 0; }
+
 
 /**
  * Constructor of Test registers the test instance with the
