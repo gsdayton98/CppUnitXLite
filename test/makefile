@@ -27,7 +27,7 @@ MKDIR=/bin/mkdir
 .SUFFIXES:
 .SUFFICES: .cpp .hpp .h .o
 
-SRCDIR=./
+SRCDIR=
 TESTS=CppUnitXLiteTests
 
 VPATH=$(SRCDIR)
@@ -50,9 +50,12 @@ CppUnitXLiteTests: $(OBJS)
 	$(LINK.cc) -o $@ $(OBJS)
 
 
-CppUnitXLiteTests.o : $(SRCDIR)CppUnitXLiteTests.cpp
+CppUnitXLiteTests.o : $(SRCDIR)CppUnitXLiteTests.cpp  \
+$(SRCDIR)CppUnitXLiteTests.hpp \
+$(SRCDIR)../CppUnitXLite.cpp \
+$(SRCDIR)../CppUnitXLite.hpp
 
-NoMacroTests.o : $(SRCDIR)NoMacroTests.cpp
+NoMacroTests.o : $(SRCDIR)NoMacroTests.cpp $(SRCDIR)../CppUnitXLite.hpp
 
 test: $(TESTS)
 	./CppUnitXLiteTests
