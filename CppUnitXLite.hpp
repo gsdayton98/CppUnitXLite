@@ -55,7 +55,7 @@ THE SOFTWARE.
 #include <sstream>
 #include <string>
 
-class Failure;
+struct Failure;
 class Test;
 class TestRegistry;
 class TestResult;

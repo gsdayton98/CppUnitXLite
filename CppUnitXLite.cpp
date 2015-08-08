@@ -1,4 +1,3 @@
-
 // -*- mode:C++; c-basic-offset:2; indent-tabs-mode:nil -*-
 /* 
 Copyright (c) 2015 Glen S. Dayton
