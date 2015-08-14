@@ -25,7 +25,7 @@ THE SOFTWARE.
   *
   *  Typical use is to define your tests as in the following example:
   *
-  *  #include <CppUnitXLite/CppUnitXLite.hpp>
+  *  #include <CppUnitXLite/CppUnitXLite.cpp>
   *
   *  TEST(testclassname, testname)
   *  {

@@ -1,20 +1,35 @@
 Welcome to the C++ Extra Light Unit Testing Framework
 
-To use, include the header file CppUnitXLite.hpp in your own unit test.  Read
-the header file for its documentation on how to use it.
-
-Also include CppUnitXLite.cpp for definitions that the linker insists should
-happen only once, or compile it separately and include it on the link command
-line.
+To use, include the file CppUnitXLite.cpp in your own unit test. That's right,
+include the .cpp file.  Read the header file, CppUnitXLite.hpp, for its
+documentation on how to use it.  If your test spans multiple source files,
+you may compile CppUnitXLite separately and include CppUnitXLite.hpp where
+you need it. For simple single source tests, just include CppUnitXLite.cpp
+to spare you the trouble multiple compilations.
 
 CppUnitXLiteTests contain unit tests for the framework itself and may be used
 as an example of using CppUnitXLiteTest.  The framework compiles the definition
 file, CppUnitXLite.cpp, separately and links it.  Three files implement the
 CPPUnitXLite tests just to prove that multi-source files tests can be created.
 
-To make the tests, change the working directory to CppUnitXLiteTests and perform
+To make the tests, change the working directory to CppUnitXLite/test and perform
 
     make -f CppUnitXLite.mak
+
+
+As you work and modify this framework, please keep it simple as possible and
+no simpler.  If you want GoogleTest style ASSERT and CHECK -- please don't. If
+you want to abort the test program, do it yourself in the program, and don't
+expect the framework to do it for you.  If you want the results logged to
+someplace else, derive from the TestResult class and use your own main() to
+use it.  CppUnitXLiteTests.cpp is an example of replacing TestResults with
+a child so you can do your own logging.
+
+test/CppUnitXLite.cpp is an example of tests using the convenience macros.
+test/NoMacroTests.cpp essentially do the same thing without the convenience
+macros.  Not using the convenience macros allow you to customize the error
+messages.  The test CheckEqualTest in test/NoMacroTests.cpp demonstrates
+you may mix the two approaches.
 
 
 WHY?
@@ -23,13 +38,24 @@ Most unit testing frameworks take their inspiration from frameworks for other
 languages, missing the power and elegance of C++.  They implement features not
 needed in a compiled and linked language like C++.  For example, in C++, if
 you need a global test framework, just define one.  You don't need to
-co-ordinate it with unit testing.
+co-ordinate it with unit testing.  If you need to override a system library
+function, just define one and link it before the library.  Most frameworks
+depend upon macros to do their magic.  CppUnitXLite demonstrates C++ allows
+you to do the same things without macros.
 
-As you work and modify this framework, please keep it simple as possible and
-no simpler.  If you want GoogleTest style ASSERT and CHECK -- please don't. If
-you want to abort the test program, do it yourself in the program, and don't
-expect the framework to do it for you.
+As simple as CppUnitXLite seems to be, maybe it can be more elegant and
+simple.  The driver is main(), which creates the TestRegistry.  A
+Registry is a collection of tests.  TestResults are a collection of
+Failures.  TestResults also report the failures.  See the dichotomy of
+purpose of TestResults?  The Test class itself has methods checkEqual(),
+checkLE(), checkLT(), checkGE(), checkGT(), checkAppoxEqual() -- which
+seems like a lot of repetition of logic.  Maybe we'll have to wait for
+C++14 to become more prevalent to use lambdas to avoid repeating code
+so many times.  If you think of better ways to do this, please do it.
 
-As for mock objects, you can replace system functions by just defining them
-before the system libraries load.
+Please note that the initial version of CppUnitXLite make no attempt
+at internationalization.
+
+
+
 
