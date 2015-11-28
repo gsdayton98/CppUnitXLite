@@ -116,6 +116,7 @@ class Test
 {
 public:
   Test(const char *theTestName);
+  virtual ~Test() {}
 
   /**
    * Override the run() method to execute your own tests.
@@ -278,10 +279,12 @@ class TestResult
 public:
   TestResult() : failureCount(0) {}
 
+  virtual ~TestResult();
+
   virtual void addFailure(const Failure &failure)
   {
-    std::cout << "Failure: \"" << failure.message << "\" @" << failure.fileName << ":" << failure.lineNumber << std::endl;
-    ++failureCount;
+    std::cout << failure.fileName << ":" << failure.lineNumber <<  ":0 test \"" << failure.message << "\" failed" << std::endl;
+    addFailureCount();
   }
 
   virtual void testsEnded()
@@ -294,6 +297,13 @@ public:
     {
       std::cout << "There were no test failures" << std::endl;
     }
+  }
+
+protected:
+  int &addFailureCount(int increment = 1)
+  {
+    failureCount += increment;
+    return failureCount;
   }
 
 private:
