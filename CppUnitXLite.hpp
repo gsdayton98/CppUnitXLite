@@ -279,7 +279,7 @@ class TestResult
 public:
   TestResult() : failureCount(0) {}
 
-  virtual ~TestResult();
+  virtual ~TestResult() {}
 
   virtual void addFailure(const Failure &failure)
   {
