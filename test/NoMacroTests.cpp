@@ -28,8 +28,10 @@ THE SOFTWARE.
 #include <iostream>
 #include <stdexcept>
 #include <vector>
-#include <CppUnitXLite/CppUnitXLite.hpp>
+#include "CppUnitXLite.hpp"
 #include "CppUnitXLiteTests.hpp"
+
+unsigned int expectedFailures = 0;
 
 // Alternate representation of the same tests expressed without macros
 //  To define a test do the following:
@@ -77,4 +79,3 @@ struct CheckEqualTest : public Test
   }
 } CheckEqualTest;
 }//namespace CppUnitXLiteTest
-
