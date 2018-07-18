@@ -1,5 +1,5 @@
 // -*- mode:C++; c-basic-offset:2; indent-tabs-mode:nil -*-
-/* 
+/*
 Copyright (c) 2015 Glen S. Dayton
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18,14 +18,14 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE. 
+THE SOFTWARE.
 */
 
-/** 
+/**
  *  One-time linker definitions.
- *  
- * Include this file in the same place where you define your 
- * main(). 
+ *
+ * Include this file in the same place where you define your
+ * main().
  */
 
 
@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <CppUnitXLite/CppUnitXLite.hpp>
+#include "CppUnitXLite.hpp"
 
 Test::Test(const char *theTestName)
 : testName(theTestName),
@@ -76,5 +76,3 @@ void TestRegistry::run(TestResult &result)
   for (Test *test = tests; test != NULL; test = test->next()) test->run(result);
   result.testsEnded();
 }
-
-

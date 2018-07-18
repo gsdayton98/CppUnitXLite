@@ -16,6 +16,9 @@ To make the tests, change the working directory to CppUnitXLite/test and perform
 
     make
 
+You may also use Bazel to run the tests with
+
+    bazel test ...
 
 As you work and modify this framework, please keep it simple as possible and
 no simpler. If you want GoogleTest style ASSERT and CHECK -- please don't. If
@@ -55,7 +58,3 @@ so many times. If you think of better ways to do this, please do it.
 
 Please note that the initial version of CppUnitXLite makes no attempt
 at internationalization.
-
-
-
-

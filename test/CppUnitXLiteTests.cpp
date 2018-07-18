@@ -28,9 +28,9 @@ THE SOFTWARE.
 #include <iostream>
 #include <stdexcept>
 #include <vector>
-#include <CppUnitXLite/CppUnitXLite.hpp>
+#include "CppUnitXLite.hpp"
 // Cheap way to get one-time linker definitions without mucking up the command line
-#include <CppUnitXLite/CppUnitXLite.cpp>
+#include "CppUnitXLite.cpp"
 #include "CppUnitXLiteTests.hpp"
 
 
@@ -158,4 +158,3 @@ main(int, char **)
   }
   return exitStatus;
 }
-
