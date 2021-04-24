@@ -1,4 +1,4 @@
-Welcome to the C++ Extra Light Unit Testing Framework
+# Welcome to the C++ Extra Light Unit Testing Framework
 
 To use, include the file CppUnitXLite.cpp in your own unit test. That's right,
 include the .cpp file. Read the header file, CppUnitXLite.hpp, for its
