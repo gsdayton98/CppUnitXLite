@@ -4,3 +4,9 @@ Debug
 Release
 test/CppUnitXLiteTests
 .settings
+.DS_Store
+*.vpwhistu
+*.vtg
+make.rules
+*.vpw
+*.vpj

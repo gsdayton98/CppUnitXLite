@@ -38,80 +38,73 @@ unsigned int expectedFailures = 0;
 
 
 InstrumentedResult::InstrumentedResult()
-: TestResult(),
-  collectedFailures()
+    : TestResult(),
+      collectedFailures()
 { }
 
 void
-InstrumentedResult::addFailure(const Failure &failure)
-{
-  collectedFailures.push_back(failure);
+InstrumentedResult::addFailure(const Failure &failure) {
+    collectedFailures.push_back(failure);
 }
 
 unsigned int
-InstrumentedResult::numberFailures() const
-{
-  return collectedFailures.size();
+InstrumentedResult::numberFailures() const {
+    return collectedFailures.size();
 }
 
 
 std::vector<Failure>::const_iterator
-InstrumentedResult::begin() const
-{
-  return collectedFailures.begin();
+InstrumentedResult::begin() const {
+    return collectedFailures.begin();
 }
 
 std::vector<Failure>::const_iterator
-InstrumentedResult::end() const
-{
-  return collectedFailures.end();
+InstrumentedResult::end() const {
+    return collectedFailures.end();
 }
 
 
-TEST(CppUnitXLiteTest, Fail)
-{
-  FAIL("Expected failure"); ++expectedFailures;
+TEST(CppUnitXLiteTest, Fail) {
+#line 1000
+    FAIL("Expected failure"); ++expectedFailures;
 }
 
 
-TEST(CppUnitXLiteTest, Check)
-{
-  CHECK(false); ++expectedFailures;
-  CHECK(true);
+TEST(CppUnitXLiteTest, Check) {
+    CHECK(false); ++expectedFailures;
+    CHECK(true);
 }
 
 
-TEST(CppUnitXLiteTest, CheckEqual)
-{
-  std::string actual = "The rain in Spain";
-  CHECK_EQUAL(std::string("The Rain in Spain"), actual); ++expectedFailures;
-  CHECK_EQUAL(std::string("The rain in Spain"), actual);
+TEST(CppUnitXLiteTest, CheckEqual) {
+    std::string actual = "The rain in Spain";
+    CHECK_EQUAL(std::string("The Rain in Spain"), actual); ++expectedFailures;
+    CHECK_EQUAL(std::string("The rain in Spain"), actual);
 }
 
 
-TEST(CppUnitXLiteTest, CheckApproxEqual)
-{
-  CHECK_APPROX_EQUAL(4.0, sqrt(16.0), 1.0E-15);
-  CHECK_APPROX_EQUAL(2.5, 3.0, 1.0);
-  CHECK_APPROX_EQUAL(2.5, 3.0, 0.1);  ++expectedFailures;
+TEST(CppUnitXLiteTest, CheckApproxEqual) {
+    CHECK_APPROX_EQUAL(4.0, sqrt(16.0), 1.0E-15);
+    CHECK_APPROX_EQUAL(2.5, 3.0, 1.0);
+#line 2000
+    CHECK_APPROX_EQUAL(2.5, 3.0, 0.1);  ++expectedFailures;
 }
 
 
-TEST(CppUnitXLiteTest, CheckConstCharStar)
-{
-  static const char actual[] = "aardvark";
-  CHECK_EQUAL("aardvark", actual);
-  CHECK_EQUAL("giraffe", actual);  ++expectedFailures;
+TEST(CppUnitXLiteTest, CheckConstCharStar) {
+    static const char actual[] = "aardvark";
+    CHECK_EQUAL("aardvark", actual);
+#line 3000
+    CHECK_EQUAL("giraffe", actual);  ++expectedFailures;
 }
 
-TEST(CppUnitXLiteTest, CheckRelationalOperators)
-{
-  CHECK_LE(4, 5);
-  CHECK_LE(4, 4);
-  CHECK_LT(4, 5);
-  CHECK_GE(5, 4);
-  CHECK_GE(5, 5);
-  CHECK_GT(5, 4);
+TEST(CppUnitXLiteTest, CheckRelationalOperators) {
+    CHECK_LE(4, 5);
+    CHECK_LE(4, 4);
+    CHECK_LT(4, 5);
+    CHECK_GE(5, 4);
+    CHECK_GE(5, 5);
+    CHECK_GT(5, 4);
 }
 
 // Custom main() to drive tests of the test framework.
@@ -120,42 +113,28 @@ TEST(CppUnitXLiteTest, CheckRelationalOperators)
 //  macro
 
 int
-main(int, char **)
-{
-  int exitStatus = EXIT_FAILURE;
+main(int, char **) {
+    int exitStatus = EXIT_FAILURE;
 
-  try
-  {
-    InstrumentedResult tr;
-    TestRegistry::runAll(tr);
+    try {
+        InstrumentedResult tr;
+        TestRegistry::runAll(tr);
 
-    if (tr.numberFailures() != expectedFailures)
-    {
-      std::cerr << "Did not get expected failures" << std::endl;
+        if (tr.numberFailures() != expectedFailures) {
+            std::cerr << "Did not get expected failures" << std::endl;
+        }
 
-      #if __cplusplus >= 201103L
-      for (const auto &f : tr)
-      {
-        std::cout << f.testName << ": " << f.message << ": " << f.fileName << "@" << f.lineNumber << std::endl;
-      }
-      #else
-      for (std::vector<Failure>::const_iterator f=tr.begin(); f != tr.end(); ++f)
-      {
-        std::cout << f->testName << ": " << f->message << ": " << f->fileName << "@" << f->lineNumber << std::endl;
-      }
-      #endif
+            for (const auto &f : tr) {
+                std::cout << f.testName << ": " << f.message << ": " << f.fileName << "@" << f.lineNumber << std::endl;
+            }
+  //      }
+
+        exitStatus = EXIT_SUCCESS;
+    } catch (const std::exception &ex) {
+        std::cerr << "Unhandled exception: " << ex.what() << std::endl;
+    } catch (...) {
+        std::cerr << "Non standard exception" << std::endl;
     }
-
-    exitStatus = EXIT_SUCCESS;
-  }
-  catch (const std::exception& ex)
-  {
-    std::cerr << "Unhandled exception: " << ex.what() << std::endl;
-  }
-  catch (...)
-  {
-    std::cerr << "Non standard exception" << std::endl;
-  }
-  return exitStatus;
+    return exitStatus;
 }
 

@@ -34,6 +34,7 @@ VPATH=$(SRCDIR)
 
 INCLUDEDIR=$(SRCDIR)../..
 CPPFLAGS=-I$(INCLUDEDIR)
+CXXFLAGS=--std=c++2b -stdlib=libc++
 
 SRCS:=CppUnitXLiteTests.cpp NoMacroTests.cpp
 OBJS:=$(SRCS:%.cpp=%.o)

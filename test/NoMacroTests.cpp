@@ -47,6 +47,7 @@ struct FailTest : public Test
   FailTest() : Test("CppUnitXLiteTest::FailTest") { }
   void run(TestResult &result)
   {
+#line 5000
     fail(result, "Expected failure"); ++expectedFailures;
   }
 } FailTestInstance;
@@ -57,6 +58,7 @@ struct CheckTest : public Test
   CheckTest() : Test("CppUnitXLiteTest::CheckTest") { }
   void run(TestResult &result)
   {
+ #line 6000
     check(result, false, "expected false"); ++expectedFailures;
     check(result, true, "expect no error");
   }
@@ -72,6 +74,7 @@ struct CheckEqualTest : public Test
   void run(TestResult &theResult)
   {
     std::string actual = "The rain in Spain";
+#line 7000
     CHECK_EQUAL(std::string("The Rain in Spain"), actual); ++expectedFailures;
     CHECK_EQUAL(std::string("The rain in Spain"), actual);
   }
