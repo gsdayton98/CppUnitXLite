@@ -27,7 +27,7 @@ THE SOFTWARE.
   *
   *  #include <CppUnitXLite/CppUnitXLite.cpp>
   *
-  *  TEST(testclassname, testname)
+  *  TEST(test_classname, test_name)
   *  {
   *     CHECK(condition);
   *     CHECK_EQUAL(expected, actual);
@@ -48,16 +48,23 @@ THE SOFTWARE.
   *   CHECK_EQUAL instantiates to a templated method, which does have an
   *   explicit instantiate for comparing const char * style strings.
   */
-#ifndef CPPUNITXLITE_H_
-#define CPPUNITXLITE_H_
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCUnusedMacroInspection"
+#ifndef CPP_UNIT_X_LITE_H_
+#define CPP_UNIT_X_LITE_H_
+
 #include <cmath>
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <utility>
 
 struct Failure;
+
 class Test;
+
 class TestRegistry;
+
 class TestResult;
 
 
@@ -70,13 +77,13 @@ void testGroup##testName##Test::run (TestResult& theResult)
 
 #define CHECK(condition) check(theResult, (condition), #condition, __FILE__, __LINE__)
 
-#define CHECK_EQUAL(expected,actual) checkEqual((expected), (actual), theResult, __FILE__, __LINE__)
-#define CHECK_LE(expected,actual) checkLE((expected), (actual), theResult, __FILE__, __LINE__)
-#define CHECK_LT(expected,actual) checkLT((expected), (actual), theResult, __FILE__, __LINE__)
-#define CHECK_GT(expected,actual) checkGT((expected), (actual), theResult, __FILE__, __LINE__)
-#define CHECK_GE(expected,actual) checkGE((expected), (actual), theResult, __FILE__, __LINE__)
+#define CHECK_EQUAL(expected, actual) checkEqual((expected), (actual), theResult, __FILE__, __LINE__)
+#define CHECK_LE(expected, actual) checkLE((expected), (actual), theResult, __FILE__, __LINE__)
+#define CHECK_LT(expected, actual) checkLT((expected), (actual), theResult, __FILE__, __LINE__)
+#define CHECK_GT(expected, actual) checkGT((expected), (actual), theResult, __FILE__, __LINE__)
+#define CHECK_GE(expected, actual) checkGE((expected), (actual), theResult, __FILE__, __LINE__)
 
-#define CHECK_APPROX_EQUAL(expected,actual,threshold) checkApproxEqual((expected), (actual), (threshold), theResult, __FILE__, __LINE__)
+#define CHECK_APPROX_EQUAL(expected, actual, threshold) checkApproxEqual((expected), (actual), (threshold), theResult, __FILE__, __LINE__)
 
 #define FAIL(text) fail(theResult, (text), __FILE__, __LINE__)
 
@@ -87,164 +94,152 @@ void testGroup##testName##Test::run (TestResult& theResult)
  * Constructor of Test registers the test instance with the
  * TestRegistry during the static initialization phase.
  */
-class TestRegistry
-{
+class TestRegistry {
 public:
-  static void addTest(Test *test) { instance().add(test); }
+    static void addTest(Test *test) { instance().add(test); }
 
-  static void runAll(TestResult &result) { instance().run(result); }
+    static void runAll(TestResult &result) { instance().run(result); }
 
 private:
-  static TestRegistry& instance()
-  {
-    static TestRegistry registry;
-    return registry;
-  }
+    static TestRegistry &instance() {
+        static TestRegistry registry;
+        return registry;
+    }
 
-  void add(Test *test);
+    void add(Test *test);
 
-  void run(TestResult &result);
+    void run(TestResult &result);
 
-  Test *tests;
+    Test *tests;
 };
 
 
 /**
  *  Inherit from Test to define your own unit test.
  */
-class Test
-{
+class Test {
 public:
-  Test(const char *theTestName);
-  virtual ~Test() {}
+    explicit Test(const char *theTestName);
 
-  /**
-   * Override the run() method to execute your own tests.
-   *
-   * @param result Pass the result argument to the check methods
-   *               to record results.
-   */
-  virtual void run(TestResult &result) = 0;
+    virtual ~Test() = default;
 
-  inline void next(Test *test) { nextTest = test; }
-  inline Test* next() const { return nextTest; }
+    /**
+     * Override the run() method to execute your own tests.
+     *
+     * @param result Pass the result argument to the check methods
+     *               to record results.
+     */
+    virtual void run(TestResult &result) = 0;
+
+    inline void next(Test *test) { nextTest = test; }
+
+    [[nodiscard]] inline Test *next() const { return nextTest; }
 
 protected:
-  bool check(TestResult &result,
-             bool condition,
-             const char *conditionString,
-             const char *fileName = __FILE__,
-             unsigned int lineNumber = __LINE__)
-  {
-    if (!condition) fail(result, conditionString, fileName, lineNumber);
-    return condition;
-  }
-
-
-  bool fail(TestResult &result,
-            const char *conditionString,
-            const char *fileName = __FILE__,
-            unsigned int lineNumber = __LINE__);
-
-  template<typename SubjectType>
-  bool checkEqual(SubjectType expected,
-                  SubjectType actual,
-                  TestResult &result,
-                  const char *fileName = __FILE__,
-                  unsigned int lineNumber = __LINE__)
-  {
-    bool successful = expected == actual;
-    if (!successful)
-    {
-      std::ostringstream message;
-      message << "expected: " << expected << " but received: " << actual;
-      fail(result, message.str().c_str(), fileName, lineNumber);
-    }
-    return successful;
-  }
-
-  template<typename SubjectType>
-  bool checkLE(SubjectType expected,
-               SubjectType actual,
-               TestResult &result,
+    auto check(TestResult &result,
+               bool condition,
+               const char *conditionString,
                const char *fileName = __FILE__,
-               unsigned int lineNumber = __LINE__)
-  {
-    bool successful = expected <=  actual;
-    if (!successful)
-    {
-      std::ostringstream message;
-      message << "expected " << expected << " not <= actual " << actual;
-      fail(result, message.str().c_str(), fileName, lineNumber);
+               unsigned int lineNumber = __LINE__) -> bool {
+        if (!condition) { fail(result, conditionString, fileName, lineNumber); }
+        return condition;
     }
-    return successful;
-  }
 
-  template<typename SubjectType>
-  bool checkLT(SubjectType expected,
-               SubjectType actual,
-               TestResult &result,
-               const char *fileName = __FILE__,
-               unsigned int lineNumber = __LINE__)
-  {
-    bool successful = expected <  actual;
-    if (!successful)
-    {
-      std::ostringstream message;
-      message << "expected " << expected << " not < actual " << actual;
-      fail(result, message.str().c_str(), fileName, lineNumber);
+
+    auto fail(TestResult &result,
+              const char *conditionString,
+              const char *fileName = __FILE__,
+              unsigned int lineNumber = __LINE__) -> bool;
+
+    template<typename SubjectType>
+    auto checkEqual(SubjectType expected,
+                    SubjectType actual,
+                    TestResult &result,
+                    const char *fileName = __FILE__,
+                    unsigned int lineNumber = __LINE__) -> bool {
+        bool successful = expected == actual;
+        if (!successful) {
+            std::ostringstream message;
+            message << "expected: " << expected << " but received: " << actual;
+            fail(result, message.str().c_str(), fileName, lineNumber);
+        }
+        return successful;
     }
-    return successful;
-  }
 
-  template<typename SubjectType>
-  bool checkGT(SubjectType expected,
-               SubjectType actual,
-               TestResult &result,
-               const char *fileName = __FILE__,
-               unsigned int lineNumber = __LINE__)
-  {
-    bool successful = expected >  actual;
-    if (!successful)
-    {
-      std::ostringstream message;
-      message << "expected " << expected << " not > actual " << actual;
-      fail(result, message.str().c_str(), fileName, lineNumber);
+    template<typename SubjectType>
+    auto checkLE(SubjectType expected,
+                 SubjectType actual,
+                 TestResult &result,
+                 const char *fileName = __FILE__,
+                 unsigned int lineNumber = __LINE__) -> bool {
+        bool successful = expected <= actual;
+        if (!successful) {
+            std::ostringstream message;
+            message << "expected " << expected << " not <= actual " << actual;
+            fail(result, message.str().c_str(), fileName, lineNumber);
+        }
+        return successful;
     }
-    return successful;
-  }
 
-  template<typename SubjectType>
-  bool checkGE(SubjectType expected,
-               SubjectType actual,
-               TestResult &result,
-               const char *fileName = __FILE__,
-               unsigned int lineNumber = __LINE__)
-  {
-    bool successful = expected >=  actual;
-    if (!successful)
-    {
-      std::ostringstream message;
-      message << "expected " << expected << " not >= actual " << actual;
-      fail(result, message.str().c_str(), fileName, lineNumber);
+    template<typename SubjectType>
+    auto checkLT(SubjectType expected,
+                 SubjectType actual,
+                 TestResult &result,
+                 const char *fileName = __FILE__,
+                 unsigned int lineNumber = __LINE__) -> bool {
+        bool successful = expected < actual;
+        if (!successful) {
+            std::ostringstream message;
+            message << "expected " << expected << " not < actual " << actual;
+            fail(result, message.str().c_str(), fileName, lineNumber);
+        }
+        return successful;
     }
-    return successful;
-  }
 
-  template<typename SubjectType>
-  bool checkApproxEqual(SubjectType expected,
-                        SubjectType actual,
-                        SubjectType threshold,
-                        TestResult &result,
-                        const char *fileName = __FILE__,
-                        unsigned int lineNumber = __LINE__);
+    template<typename SubjectType>
+    auto checkGT(SubjectType expected,
+                 SubjectType actual,
+                 TestResult &result,
+                 const char *fileName = __FILE__,
+                 unsigned int lineNumber = __LINE__) -> bool {
+        bool successful = expected > actual;
+        if (!successful) {
+            std::ostringstream message;
+            message << "expected " << expected << " not > actual " << actual;
+            fail(result, message.str().c_str(), fileName, lineNumber);
+        }
+        return successful;
+    }
+
+    template<typename SubjectType>
+    auto checkGE(SubjectType expected,
+                 SubjectType actual,
+                 TestResult &result,
+                 const char *fileName = __FILE__,
+                 unsigned int lineNumber = __LINE__) -> bool {
+        bool successful = expected >= actual;
+        if (!successful) {
+            std::ostringstream message;
+            message << "expected " << expected << " not >= actual " << actual;
+            fail(result, message.str().c_str(), fileName, lineNumber);
+        }
+        return successful;
+    }
+
+    template<typename SubjectType>
+    auto checkApproxEqual(SubjectType expected,
+                          SubjectType actual,
+                          SubjectType threshold,
+                          TestResult &result,
+                          const char *fileName = __FILE__,
+                          unsigned int lineNumber = __LINE__) -> bool;
 
 private:
-  template<typename SubjectType>
-  SubjectType abs(SubjectType x) { return x < 0 ? -x : x; }
+    template<typename SubjectType>
+    SubjectType abs(SubjectType x) { return x < 0 ? -x : x; }
 
-  std::string testName;
-  Test *nextTest;
+    std::string testName;
+    Test *nextTest;
 };
 
 
@@ -252,94 +247,84 @@ private:
  *  Record everything knowable about the circumstance and
  *  location of a failure.
  */
-struct Failure
-{
-  Failure(const std::string &theTestName,
-          const std::string &theFileName,
-          unsigned int theLineNumber,
-          const std::string &theCondition)
-  : message(theCondition),
-    testName(theTestName),
-    fileName(theFileName),
-    lineNumber(theLineNumber)
-  {}
+struct Failure {
+    Failure(std::string theTestName,
+            std::string theFileName,
+            unsigned int theLineNumber,
+            std::string theCondition)
+            : message(std::move(theCondition)),
+              testName(std::move(theTestName)),
+              fileName(std::move(theFileName)),
+              lineNumber(theLineNumber) {}
 
-  std::string message;
-  std::string testName;
-  std::string fileName;
-  unsigned int lineNumber;
+    std::string message;
+    std::string testName;
+    std::string fileName;
+    unsigned int lineNumber;
 };
 
 
 /**
  *  Collect all of the results of tests and checks.
  */
-class TestResult
-{
+class TestResult {
 public:
-  TestResult() : failureCount(0) {}
+    TestResult() : failureCount(0) {}
 
-  virtual ~TestResult() {}
+    virtual ~TestResult() = default;
 
-  virtual void addFailure(const Failure &failure)
-  {
-    std::cout << failure.fileName << ":" << failure.lineNumber <<  ":0 test \"" << failure.message << "\" failed" << std::endl;
-    addFailureCount();
-  }
-
-  virtual void testsEnded()
-  {
-    if (failureCount > 0)
-    {
-      std::cout << "There were " << failureCount << " failures" << std::endl;
+    virtual void addFailure(const Failure &failure) {
+        std::cout << failure.fileName << ":" << failure.lineNumber << ":0 test \"" << failure.message << "\" failed"
+                  << std::endl;
+        addFailureCount();
     }
-    else
-    {
-      std::cout << "There were no test failures" << std::endl;
+
+    virtual void testsEnded() {
+        if (failureCount > 0) {
+            std::cout << "There were " << failureCount << " failures" << std::endl;
+        } else {
+            std::cout << "There were no test failures" << std::endl;
+        }
     }
-  }
 
 protected:
-  int &addFailureCount(int increment = 1)
-  {
-    failureCount += increment;
-    return failureCount;
-  }
+    auto addFailureCount(int increment = 1) -> int {
+        failureCount += increment;
+        return failureCount;
+    }
 
 private:
-  int failureCount;
+    int failureCount;
 };
 
 
-inline
-bool
+inline auto
 Test::fail(TestResult &result,
-          const char *conditionString,
-          const char *fileName,
-          unsigned int lineNumber)
-{
-  result.addFailure(Failure(testName.c_str(), fileName, lineNumber, conditionString));
-  return false;
+           const char *conditionString,
+           const char *fileName,
+           unsigned int lineNumber) -> bool {
+    result.addFailure(Failure(testName, fileName, lineNumber, conditionString));
+    return false;
 }
 
 
 template<typename SubjectType>
-bool
-Test::checkApproxEqual(SubjectType expected,
+auto Test::checkApproxEqual(SubjectType expected,
                        SubjectType actual,
                        SubjectType threshold,
                        TestResult &result,
                        const char *fileName,
-                       unsigned int lineNumber)
-{
-  bool successful = abs(expected - actual) <= threshold;
-  if (!successful)
-  {
-    std::ostringstream message;
-    message << "expected: " << expected << " but received: " << actual;
-    fail(result, message.str().c_str(), fileName, lineNumber);
-  }
-  return successful;
+                       unsigned int lineNumber) -> bool {
+    bool successful = abs(expected - actual) <= threshold;
+    if (!successful) {
+        std::ostringstream message;
+        message << "expected: " << expected << " but received: " << actual;
+        fail(result, message.str().c_str(), fileName, lineNumber);
+    }
+    return successful;
 }
-#endif // CPPUNITXLITE_H_
 
+#endif // CPP_UNIT_X_LITE_H_
+
+
+#pragma clang diagnostic pop
