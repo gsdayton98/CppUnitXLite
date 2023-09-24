@@ -28,9 +28,8 @@ THE SOFTWARE.
 #include <iostream>
 #include <stdexcept>
 #include <vector>
-#include "CppUnitXLite.hpp"
 // Cheap way to get one-time linker definitions without mucking up the command line
-#include "CppUnitXLite.cpp"
+#include "CppUnitXLite/CppUnitXLite.cpp"
 #include "CppUnitXLiteTests.hpp"
 
 

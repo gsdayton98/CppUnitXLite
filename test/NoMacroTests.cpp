@@ -23,13 +23,8 @@ THE SOFTWARE.
 /**
   *  Test CppUnitXLite without using the convenience macros.
   */
-#include <cmath>
-#include <cstdlib>
 #include <iostream>
-#include <stdexcept>
-#include <vector>
-#include "CppUnitXLite.hpp"
-#include "CppUnitXLiteTests.hpp"
+#include "CppUnitXLite/CppUnitXLite.hpp"
 
 unsigned int expectedFailures = 0;
 
@@ -41,41 +36,41 @@ unsigned int expectedFailures = 0;
 //  2.  Override the run(TestResult&) method
 //  4.  Supply the TestResult argument to your check method invocations
 //  5.  Define an instance variable so an instance of your class will get
-//      constructued
-namespace CppUnitXLiteTest
-{
-struct FailTest : public Test
-{
-  FailTest() : Test("CppUnitXLiteTest::FailTest") { }
-  void run(TestResult &result)
-  {
-    fail(result, "Expected failure"); ++expectedFailures;
-  }
-} FailTestInstance;
+//      constructed
+namespace CppUnitXLiteTest {
+    [[maybe_unused]] struct FailTest : public Test {
+        FailTest() : Test("CppUnitXLiteTest::FailTest") {}
+
+        void run(TestResult &result) override {
+            fail(result, "Expected failure");
+            ++expectedFailures;
+        }
+    } FailTestInstance;
 
 
-struct CheckTest : public Test
-{
-  CheckTest() : Test("CppUnitXLiteTest::CheckTest") { }
-  void run(TestResult &result)
-  {
-    check(result, false, "expected false"); ++expectedFailures;
-    check(result, true, "expect no error");
-  }
-} CheckTestInstance;
+    [[maybe_unused]] struct CheckTest : public Test {
+        CheckTest() : Test("CppUnitXLiteTest::CheckTest") {}
+
+        void run(TestResult &result) override {
+            check(result, false, "expected false");
+            ++expectedFailures;
+            check(result, true, "expect no error");
+        }
+    } CheckTestInstance;
 
 
 // The macros use the argument "theResult" so even if you use the class method
 //  of defining tests, you may mix macros
-struct CheckEqualTest : public Test
-{
-  CheckEqualTest() : Test("CppUnitXLiteTest::CheckEqualTest"){}
+    [[maybe_unused]] struct CheckEqualTest : public Test {
+        CheckEqualTest() : Test("CppUnitXLiteTest::CheckEqualTest") {}
 
-  void run(TestResult &theResult)
-  {
-    std::string actual = "The rain in Spain";
-    CHECK_EQUAL(std::string("The Rain in Spain"), actual); ++expectedFailures;
-    CHECK_EQUAL(std::string("The rain in Spain"), actual);
-  }
-} CheckEqualTest;
+        void run(TestResult &theResult) override {
+            std::string actual = "The rain in Spain";
+            CHECK_EQUAL(std::string("The Rain in Spain"), actual);
+            ++expectedFailures;
+            CHECK_EQUAL(std::string("The rain in Spain"), actual);
+        }
+    } CheckEqualTest;
 }//namespace CppUnitXLiteTest
+
+int main(int, char **) { TestResult tr; TestRegistry::runAll(tr); return 0; }

@@ -51,7 +51,7 @@ simple. The driver is main(), which creates the TestRegistry. A
 Registry is a collection of tests. TestResults are a collection of
 Failures. TestResults also report the failures. See the dichotomy of
 purpose of TestResults? The Test class itself has methods checkEqual(),
-checkLE(), checkLT(), checkGE(), checkGT(), checkAppoxEqual() -- which
+checkLE(), checkLT(), checkGE(), checkGT(), checkApproxEqual() -- which
 seems like a lot of repetition of logic. Maybe we'll have to wait for
 C++14 to become more prevalent to use lambdas to avoid repeating code
 so many times. If you think of better ways to do this, please do it.
