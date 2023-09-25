@@ -26,7 +26,7 @@ THE SOFTWARE.
 #ifndef CPPUNITXLITETEST_H
 #define CPPUNITXLITETEST_H
 #include <vector>
-#include "CppUnitXLite.hpp"
+#include "CppUnitXLite/CppUnitXLite.hpp"
 
 // To test the test framework itself, overload the TestResult class to not
 // indicate errors when we get an expected failure.
