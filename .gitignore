@@ -3,5 +3,4 @@
 cmake-build-*
 Debug
 Release
-
 .DS_Store
