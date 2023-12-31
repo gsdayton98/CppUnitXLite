@@ -1,6 +1,6 @@
 // -*- mode:C++; c-basic-offset:2; indent-tabs-mode:nil -*-
 /*
-Copyright (c) 2015 Glen S. Dayton
+Copyright 2023 Glen S. Dayton
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,7 @@ THE SOFTWARE.
   *  Test CppUnitXLite without using the convenience macros.
   */
 #include <iostream>
-#include "CppUnitXLite/CppUnitXLite.hpp"
+#include "CppUnitXLite/CppUnitXLite.cpp"
 
 unsigned int expectedFailures = 0;
 

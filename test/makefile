@@ -1,6 +1,6 @@
 # -*- mode:C++; c-basic-offset:2; indent-tabs-mode:nil -*-
 #
-# Copyright (c) 2015 Glen S. Dayton
+# Copyright2023 Glen S. Dayton
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,7 @@ VPATH=$(SRCDIR)
 INCLUDEDIR=$(SRCDIR)../..
 CPPFLAGS=-I$(INCLUDEDIR)
 
-SRCS:=CppUnitXLiteTests.cpp NoMacroTests.cpp
+SRCS:=CppUnitXLiteTests.cpp
 OBJS:=$(SRCS:%.cpp=%.o)
 
 SRCS:=$(addprefix $(SRCDIR),$(SRCS))
@@ -43,6 +43,10 @@ DEPS:=$(OBJS:%.o=%.d)
 
 %.o : %.cpp
 	$(COMPILE.cc) -o $@ $<
+
+CPPFLAGS = -I/Users/gdayton19/Projects/CppUnitXLite/test/../..
+
+CXXFLAGS = -g -std=c++2b -fcolor-diagnostics
 
 all: test
 
@@ -55,7 +59,6 @@ $(SRCDIR)CppUnitXLiteTests.hpp \
 $(SRCDIR)../CppUnitXLite.cpp \
 $(SRCDIR)../CppUnitXLite.hpp
 
-NoMacroTests.o : $(SRCDIR)NoMacroTests.cpp $(SRCDIR)../CppUnitXLite.hpp
 
 test: $(TESTS)
 	./CppUnitXLiteTests
