@@ -20,22 +20,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-MAKE=/usr/bin/make
-RM=/bin/rm
-MKDIR=/bin/mkdir
-
 .SUFFIXES:
 .SUFFICES: .cpp .hpp .h .o
 
 SRCDIR=./
-TESTS=CppUnitXLiteTests
+TESTS=CppUnitXLiteTests NoMacroTests
 
 VPATH=$(SRCDIR)
 
 INCLUDEDIR=$(SRCDIR)../..
 CPPFLAGS=-I$(INCLUDEDIR)
 
-SRCS:=CppUnitXLiteTests.cpp
+SRCS:=CppUnitXLiteTests.cpp NoMacroTests.cpp
 OBJS:=$(SRCS:%.cpp=%.o)
 
 SRCS:=$(addprefix $(SRCDIR),$(SRCS))
@@ -50,8 +46,8 @@ CXXFLAGS = -g -std=c++2b -fcolor-diagnostics
 
 all: test
 
-CppUnitXLiteTests: $(OBJS)
-	$(LINK.cc) -o $@ $(OBJS)
+CppUnitXLiteTests: CppUnitXLiteTests.o
+	$(LINK.cc) -o $@ CppUnitXLite.o
 
 
 CppUnitXLiteTests.o : $(SRCDIR)CppUnitXLiteTests.cpp  \
@@ -60,8 +56,15 @@ $(SRCDIR)../CppUnitXLite.cpp \
 $(SRCDIR)../CppUnitXLite.hpp
 
 
+NoMacroTests: NoMacroTests.o
+	$(LINK.cc) -o $@ NoMacroTests.o
+
+NoMacroTests.o : $(SRCDIR)NoMacroTests.cpp $(SRCDIR)../CppUnitXLite.hpp
+
+
 test: $(TESTS)
 	./CppUnitXLiteTests
+	./NoMacroTests
 
 
 # Rebuild this project

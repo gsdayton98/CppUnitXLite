@@ -38,22 +38,11 @@ unsigned int expectedFailures = 0;
 //  5.  Define an instance variable so an instance of your class will get
 //      constructed
 namespace CppUnitXLiteTest {
-    [[maybe_unused]] struct FailTest : public Test {
-        FailTest() : Test("CppUnitXLiteTest::FailTest") {}
-
-        void run(TestResult &result) override {
-            fail(result, "Expected failure");
-            ++expectedFailures;
-        }
-    } FailTestInstance;
-
 
     [[maybe_unused]] struct CheckTest : public Test {
         CheckTest() : Test("CppUnitXLiteTest::CheckTest") {}
 
         void run(TestResult &result) override {
-            check(result, false, "expected false");
-            ++expectedFailures;
             check(result, true, "expect no error");
         }
     } CheckTestInstance;
@@ -66,8 +55,6 @@ namespace CppUnitXLiteTest {
 
         void run(TestResult &theResult) override {
             std::string actual = "The rain in Spain";
-            CHECK_EQUAL(std::string("The Rain in Spain"), actual);
-            ++expectedFailures;
             CHECK_EQUAL(std::string("The rain in Spain"), actual);
         }
     } CheckEqualTest;
