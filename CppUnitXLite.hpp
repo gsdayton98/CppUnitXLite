@@ -1,9 +1,9 @@
 // -*- mode:C++; c-basic-offset:2; indent-tabs-mode:nil -*-
 /*
-Copyright (c) 2015 Glen S. Dayton
+Copyright © 2015 Glen S. Dayton
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
+of this software and associated documentation files (the “Software”), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
@@ -31,13 +31,13 @@ THE SOFTWARE.
   *  {
   *     CHECK(condition);
   *     CHECK_EQUAL(expected, actual);
-  *     if (condition) FAIL("Arbitrary error message");
+  *     if (condition) FAIL("Arbitrary error message”);
   *  }
   *
   *  TESTMAIN
   *
   *  Liberally adapted from Michael Feather's CppUnitLite (downloaded from
-  *  http://www.objectmentor.com/resources/bin/CppUnitLite.zip )
+  *  http://www.objectmentor.com/resources/bin/CppUnitLite.zip)
   *
   *  Some of the changes from CppUnitLite include the following:
   *     *  Reversed order of arguments of TEST macro to match other frameworks
@@ -46,14 +46,12 @@ THE SOFTWARE.
   *
   *   CHECK_EQUAL should work with any data type that has an operator==().
   *   CHECK_EQUAL instantiates to a templated method, which does have an
-  *   explicit instantiate for comparing const char * style strings.
+  *   explicit instantiation for comparing const char * style strings.
   */
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "OCUnusedMacroInspection"
+
 #ifndef CPP_UNIT_X_LITE_H_
 #define CPP_UNIT_X_LITE_H_
 
-#include <cmath>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -96,6 +94,7 @@ void testGroup##testName##Test::run (TestResult& theResult)
  */
 class TestRegistry {
 public:
+    TestRegistry() : tests(nullptr) {}
     static void addTest(Test *test) { instance().add(test); }
 
     static void runAll(TestResult &result) { instance().run(result); }
@@ -236,7 +235,7 @@ protected:
 
 private:
     template<typename SubjectType>
-    SubjectType abs(SubjectType x) { return x < 0 ? -x : x; }
+    static SubjectType abs(SubjectType x) { return x < 0 ? -x : x; }
 
     std::string testName;
     Test *nextTest;
@@ -325,6 +324,3 @@ auto Test::checkApproxEqual(SubjectType expected,
 }
 
 #endif // CPP_UNIT_X_LITE_H_
-
-
-#pragma clang diagnostic pop

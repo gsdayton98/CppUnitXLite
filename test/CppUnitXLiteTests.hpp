@@ -1,9 +1,9 @@
 // -*- mode:C++; c-basic-offset:2; indent-tabs-mode:nil -*-
 /*
-Copyright (c) 2015 Glen S. Dayton
+Copyright © 2015 Glen S. Dayton
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
+of this software and associated documentation files (the “Software”), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
@@ -23,10 +23,10 @@ THE SOFTWARE.
 /**
   *  Test CppUnitXLite
   */
-#ifndef CPPUNITXLITETEST_H
-#define CPPUNITXLITETEST_H
+#ifndef CPP_UNIT_X_LITE_TEST_H
+#define CPP_UNIT_X_LITE_TEST_H
 #include <vector>
-#include "CppUnitXLite/CppUnitXLite.hpp"
+#include "CppUnitXLite.hpp"
 
 // To test the test framework itself, overload the TestResult class to not
 // indicate errors when we get an expected failure.
@@ -34,11 +34,11 @@ class InstrumentedResult : public TestResult
 {
 public:
   InstrumentedResult();
-  virtual void addFailure(const Failure &failure);
-  unsigned int numberFailures() const;
+  void addFailure(const Failure &failure) override;
+  [[nodiscard]] auto numberFailures() const -> unsigned int;
 
-  std::vector<Failure>::const_iterator begin() const;
-  std::vector<Failure>::const_iterator end() const;
+  [[nodiscard]] auto begin() const -> std::vector<Failure>::const_iterator;
+  [[nodiscard]] auto end() const -> std::vector<Failure>::const_iterator ;
 
 private:
   std::vector<Failure> collectedFailures;
