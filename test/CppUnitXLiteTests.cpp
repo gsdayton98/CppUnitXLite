@@ -1,9 +1,9 @@
 // -*- mode:C++; c-basic-offset:2; indent-tabs-mode:nil -*-
 /*
-Copyright (c) 2015 Glen S. Dayton
+Copyright © 2015 Glen S. Dayton
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
+of this software and associated documentation files (the “Software”), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
@@ -28,8 +28,8 @@ THE SOFTWARE.
 #include <iostream>
 #include <stdexcept>
 #include <vector>
-// Cheap way to get one-time linker definitions without mucking up the command line
-#include "CppUnitXLite/CppUnitXLite.cpp"
+// Inexpensive way to get one-time linker definitions without mucking up the command line.
+#include "CppUnitXLite.cpp"
 #include "CppUnitXLiteTests.hpp"
 
 
@@ -98,7 +98,7 @@ TEST(CppUnitXLiteTest, CheckApproxEqual)
 
 TEST(CppUnitXLiteTest, CheckConstCharStar)
 {
-  static const char actual[] = "aardvark";
+  static constexpr char actual[] = "aardvark";
   CHECK_EQUAL("aardvark", actual);
   CHECK_EQUAL("giraffe", actual);  ++expectedFailures;
 }
@@ -116,7 +116,7 @@ TEST(CppUnitXLiteTest, CheckRelationalOperators)
 // Custom main() to drive tests of the test framework.
 //  In normal circumstances just use the
 //  TESTMAIN
-//  macro
+//  macro.
 
 int
 main(int, char **)

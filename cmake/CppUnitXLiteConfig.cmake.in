@@ -1,0 +1,5 @@
+@PACKAGE_INIT@
+set(CppUnitXLite_INCLUDE_DIRS "@CppUnitXLite_INCLUDE_DIRS@")
+set(CppUnitXLite_LIBDIR "@CppUnitXLite_LIBDIR@" )
+set(CppUnitXLite_LIBRARIES "@CppUnitXLite_LIBRARIES@")
+include("${CMAKE_CURRENT_LIST_DIR}/CppUnitXLiteTargets.cmake")

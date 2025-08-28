@@ -3,7 +3,7 @@
 Copyright 2023 Glen S. Dayton
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
+of this software and associated documentation files (the “Software”), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
@@ -24,19 +24,19 @@ THE SOFTWARE.
   *  Test CppUnitXLite without using the convenience macros.
   */
 #include <iostream>
-#include "CppUnitXLite/CppUnitXLite.cpp"
+#include "CppUnitXLite.cpp"
 
 unsigned int expectedFailures = 0;
 
 // Alternate representation of the same tests expressed without macros
 //  To define a test do the following:
-//  1.  Inherit from Test
-//  2.  Define your test's constructor. Register the test and its name with
+//  1. Inherit from Test
+//  2. Define your test's constructor. Register the test and its name with
 //      the Test() constructor
 //  2.  Override the run(TestResult&) method
-//  4.  Supply the TestResult argument to your check method invocations
-//  5.  Define an instance variable so an instance of your class will get
-//      constructed
+//  4. Supply the TestResult argument to your check method invocations
+//  5. Define an instance variable, so an instance of your class will get
+//      constructed.
 namespace CppUnitXLiteTest {
 
     [[maybe_unused]] struct CheckTest : public Test {
@@ -48,8 +48,8 @@ namespace CppUnitXLiteTest {
     } CheckTestInstance;
 
 
-// The macros use the argument "theResult" so even if you use the class method
-//  of defining tests, you may mix macros
+// The macros use the argument “theResult” so even if you use the class method
+//  of defining tests, you may mix macros.
     [[maybe_unused]] struct CheckEqualTest : public Test {
         CheckEqualTest() : Test("CppUnitXLiteTest::CheckEqualTest") {}
 
