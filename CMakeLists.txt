@@ -6,6 +6,7 @@ include(GNUInstallDirs)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON)
 
+
 set(CMAKE_CXX_STANDARD 23)
 
 add_library(CppUnitXLite STATIC CppUnitXLite.hpp CppUnitXLite.cpp)
